@@ -24,6 +24,9 @@
             this.labelX = new System.Windows.Forms.Label();
             this.widthText = new System.Windows.Forms.TextBox();
             this.heightText = new System.Windows.Forms.TextBox();
+            this.xplaneIp = new System.Windows.Forms.TextBox();
+            this.xplaneIpLabel = new System.Windows.Forms.Label();
+            this.nvanLinkLabel = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // showMcdu1Button
@@ -98,11 +101,41 @@
             this.heightText.Size = new System.Drawing.Size(57, 20);
             this.heightText.TabIndex = 7;
             // 
+            // xplaneIp
+            // 
+            this.xplaneIp.Location = new System.Drawing.Point(84, 94);
+            this.xplaneIp.Name = "xplaneIp";
+            this.xplaneIp.Size = new System.Drawing.Size(168, 20);
+            this.xplaneIp.TabIndex = 8;
+            // 
+            // xplaneIpLabel
+            // 
+            this.xplaneIpLabel.AutoSize = true;
+            this.xplaneIpLabel.Location = new System.Drawing.Point(12, 97);
+            this.xplaneIpLabel.Name = "xplaneIpLabel";
+            this.xplaneIpLabel.Size = new System.Drawing.Size(66, 13);
+            this.xplaneIpLabel.TabIndex = 9;
+            this.xplaneIpLabel.Text = "Simulator IP:";
+            // 
+            // nvanLinkLabel
+            // 
+            this.nvanLinkLabel.AutoSize = true;
+            this.nvanLinkLabel.Location = new System.Drawing.Point(94, 121);
+            this.nvanLinkLabel.Name = "nvanLinkLabel";
+            this.nvanLinkLabel.Size = new System.Drawing.Size(72, 13);
+            this.nvanLinkLabel.TabIndex = 10;
+            this.nvanLinkLabel.TabStop = true;
+            this.nvanLinkLabel.Text = "www.nvan.es";
+            this.nvanLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.nvanLinkLabel_LinkClicked);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(264, 93);
+            this.ClientSize = new System.Drawing.Size(264, 142);
+            this.Controls.Add(this.nvanLinkLabel);
+            this.Controls.Add(this.xplaneIpLabel);
+            this.Controls.Add(this.xplaneIp);
             this.Controls.Add(this.heightText);
             this.Controls.Add(this.widthText);
             this.Controls.Add(this.labelX);
@@ -129,6 +162,9 @@
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.TextBox widthText;
         private System.Windows.Forms.TextBox heightText;
+        private System.Windows.Forms.TextBox xplaneIp;
+        private System.Windows.Forms.Label xplaneIpLabel;
+        private System.Windows.Forms.LinkLabel nvanLinkLabel;
     }
 }
 

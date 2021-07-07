@@ -4,5 +4,6 @@
     {
         public bool autoStartMcdu1, autoStartMcdu2;
         public int width, height, mcdu1PosX, mcdu1PosY, mcdu2PosX, mcdu2PosY;
+        public string xplaneIp;
     }
 }

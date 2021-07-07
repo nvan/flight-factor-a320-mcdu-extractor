@@ -4,11 +4,14 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.IO;
 
 namespace nvan.FFA320McduExtractor
 {
     public partial class MainForm : Form
     {
+        private const string IP_FILE = "screen/ip.js";
+
         private ConfigManager configManager;
 
         private McduForm mcdu1Form, mcdu2Form;
@@ -16,6 +19,8 @@ namespace nvan.FFA320McduExtractor
         public MainForm(ref ConfigManager configManager)
         {
             this.configManager = configManager;
+
+            saveXplaneIp();
 
             mcdu1Form = new McduForm(ref this.configManager, 1);
             mcdu2Form = new McduForm(ref this.configManager, 2);
@@ -26,11 +31,13 @@ namespace nvan.FFA320McduExtractor
             mcdu2Check.Checked = this.configManager.GetConfig().autoStartMcdu2;
             widthText.Text = this.configManager.GetConfig().width.ToString();
             heightText.Text = this.configManager.GetConfig().height.ToString();
+            xplaneIp.Text = this.configManager.GetConfig().xplaneIp;
 
             mcdu1Check.CheckedChanged += new EventHandler(this.settingsChanged);
             mcdu2Check.CheckedChanged += new EventHandler(this.settingsChanged);
             widthText.TextChanged += new EventHandler(this.settingsChanged);
             heightText.TextChanged += new EventHandler(this.settingsChanged);
+            xplaneIp.TextChanged += new EventHandler(this.settingsChanged);
         }
 
         private void settingsChanged(object sender, EventArgs e)
@@ -43,11 +50,20 @@ namespace nvan.FFA320McduExtractor
                 config.autoStartMcdu2 = mcdu2Check.Checked;
                 config.width = int.Parse(widthText.Text);
                 config.height = int.Parse(heightText.Text);
+                config.xplaneIp = xplaneIp.Text;
                 configManager.UpdateConfig(config);
 
                 adjustMcduFormsSize();
+                saveXplaneIp();
             }
             catch { }
+        }
+
+        private void saveXplaneIp()
+        {
+            StreamWriter sw = File.CreateText(IP_FILE);
+            sw.WriteLine("var xplaneIpAddress = '" + configManager.GetConfig().xplaneIp + "';");
+            sw.Close();
         }
 
         private void adjustMcduFormsSize()
@@ -98,6 +114,13 @@ namespace nvan.FFA320McduExtractor
 
             if (configManager.GetConfig().autoStartMcdu2)
                 showMcdu2Button_Click(null, null);
+
+            adjustMcduFormsSize();
+        }
+
+        private void nvanLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://www.nvan.es/");
         }
 
         private void SetIE8KeyforWebBrowserControl(string appName)

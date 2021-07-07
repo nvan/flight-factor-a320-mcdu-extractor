@@ -49,6 +49,7 @@ namespace nvan.FFA320McduExtractor
             this.browser.ScrollBarsEnabled = false;
             this.browser.Size = new System.Drawing.Size(340, 320);
             this.browser.TabIndex = 0;
+            this.browser.ScriptErrorsSuppressed = true;
             this.browser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.browser_DocumentCompleted);
             // 
             // coverPanel

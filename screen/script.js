@@ -160,7 +160,7 @@ function UpdateScreen() {
         WriteTextToLine(4, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
         WriteTextToLine(5, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
         WriteTextToLine(6, 'GGGGGGGGGGGGGGGGGGGGGGGG', '      PLEASE WAIT       ');
-        WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '  SELF TEST MAX 10 SEC  ');
+        WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '  CONNECTING TO XPLANE  ');
         WriteTextToLine(8, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
         WriteTextToLine(9, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
         WriteTextToLine(10, 'WWWWWWWWWWWWWWWWWWWWWWWW', '     NVAN EXTRACTOR     ');
@@ -177,8 +177,8 @@ function UpdateScreen() {
             WriteTextToLine(3, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
             WriteTextToLine(4, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
             WriteTextToLine(5, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
-            WriteTextToLine(6, 'GGGGGGGGGGGGGGGGGGGGGGGG', '        FAILURE         ');
-            WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '     NO CONNECTION      ');
+            WriteTextToLine(6, 'GGGGGGGGGGGGGGGGGGGGGGGG', '     NO CONNECTION      ');
+            WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', ' RETRYING IN 10 SECONDS ');
             WriteTextToLine(8, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
             WriteTextToLine(9, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
             WriteTextToLine(10, 'WWWWWWWWWWWWWWWWWWWWWWWW', '     NVAN EXTRACTOR     ');
@@ -187,6 +187,8 @@ function UpdateScreen() {
             WriteTextToLine(13, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
             WriteTextToLine(14, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
             localOperation = 1;
+            retryIn10Seconds();
+            
         } else {
             if ((MCDU_LastMessageReceived) >= 10) {
                 localMode = "NOCONNECTION";
@@ -195,8 +197,8 @@ function UpdateScreen() {
                 WriteTextToLine(3, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
                 WriteTextToLine(4, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
                 WriteTextToLine(5, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
-                WriteTextToLine(6, 'GGGGGGGGGGGGGGGGGGGGGGGG', '        FAILURE         ');
-                WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '     NO CONNECTION      ');
+                WriteTextToLine(6, 'GGGGGGGGGGGGGGGGGGGGGGGG', '     NO CONNECTION      ');
+                WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', ' RETRYING IN 10 SECONDS ');
                 WriteTextToLine(8, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
                 WriteTextToLine(9, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
                 WriteTextToLine(10, 'WWWWWWWWWWWWWWWWWWWWWWWW', '     NVAN EXTRACTOR     ');
@@ -205,6 +207,7 @@ function UpdateScreen() {
                 WriteTextToLine(13, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
                 WriteTextToLine(14, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
                 localOperation = 1;
+                retryIn10Seconds();
             } else {
                 WriteTextToLine(1, DisplayAttrs1, DisplayLines1);
                 WriteTextToLine(2, DisplayAttrs2, DisplayLines2);
@@ -225,6 +228,22 @@ function UpdateScreen() {
     }
 }
 
+function retryIn10Seconds() {
+    UpdateScreen = null;
+    var timeRemaining = 10;
+    var retryInterval = window.setInterval(function() {
+        timeRemaining--;
+        
+        if(timeRemaining === 0) {
+            window.clearInterval(retryInterval);
+            WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '     RETRYING NOW...    ');
+            location.reload();
+            return;
+        }
+        WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', ' RETRYING IN  ' + timeRemaining + ' SECONDS ');
+    }, 1000);
+}
+
 function WriteTextToLine(Line, Attrs, Text){
     if (Text.length < 24) {
         return;
@@ -237,7 +256,15 @@ function WriteTextToLine(Line, Attrs, Text){
                 CharToSet = "Â°"; // '\xB0'
             }
         }
-        document.getElementById(CurrentCell).innerHTML = CharToSet;
+        
+        if (CharToSet == CharSquare) {
+            document.getElementById(CurrentCell).innerHTML = '';
+            document.getElementById(CurrentCell).style.border = '0.4vw solid rgb(225, 149, 37)';
+            
+        } else {
+            document.getElementById(CurrentCell).innerHTML = CharToSet;
+            document.getElementById(CurrentCell).style.border = 'none';
+        }
     }
 
     for (let i = 0, len = 24; i < len; i++) {

@@ -20,7 +20,8 @@ function FlightFactor() {
     };
 
     this.SocketValid = false;
-    this.Socket = new WebSocket('ws://127.0.0.1:6025', 'json');
+    
+    this.Socket = new WebSocket('ws://' + xplaneIpAddress, 'json');
     
     this.Socket.onopen = function() {
 

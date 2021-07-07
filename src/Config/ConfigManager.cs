@@ -28,7 +28,8 @@ namespace nvan.FFA320McduExtractor.Config
                     mcdu1PosX = 0,
                     mcdu2PosX = 0,
                     mcdu1PosY = 0,
-                    mcdu2PosY = 0
+                    mcdu2PosY = 0,
+                    xplaneIp = "127.0.0.1:6025"
                 };
 
                 SaveConfig();
