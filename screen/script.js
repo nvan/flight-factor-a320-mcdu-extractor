@@ -237,7 +237,7 @@ function retryIn10Seconds() {
         if(timeRemaining === 0) {
             window.clearInterval(retryInterval);
             WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '     RETRYING NOW...    ');
-            location.reload();
+            window.location.href = 'screen.html';
             return;
         }
         WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', ' RETRYING IN  ' + timeRemaining + ' SECONDS ');
