@@ -149,6 +149,7 @@
             this.Name = "MainForm";
             this.Text = "NVAN Flight Factor A320 MCDU Extractor";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

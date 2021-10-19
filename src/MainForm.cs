@@ -62,7 +62,13 @@ namespace nvan.FFA320McduExtractor
         private void saveXplaneIp()
         {
             StreamWriter sw = File.CreateText(IP_FILE);
-            sw.WriteLine("var xplaneIpAddress = '" + configManager.GetConfig().xplaneIp + "';");
+            sw.WriteLine("var xplaneIpAddress = '" + configManager.GetConfig().xplaneIp + @"';
+
+// Only load scripts if IP is defined to prevent strange order
+
+document.write('<script src=""ff.js""></script>');
+document.write('<script src=""script.js""></script>');
+");
             sw.Close();
         }
 
@@ -121,6 +127,14 @@ namespace nvan.FFA320McduExtractor
         private void nvanLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://www.nvan.es/");
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            mcdu1Form.TopMost = true;
+            mcdu2Form.TopMost = true;
+            mcdu1Form.TopMost = false;
+            mcdu2Form.TopMost = false;
         }
 
         private void SetIE8KeyforWebBrowserControl(string appName)
