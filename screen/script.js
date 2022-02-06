@@ -91,12 +91,66 @@ $(document).ready(function() {
         }
         MCDU_LastMessageReceived = MCDU_LastMessageReceived + 1;
         UpdateScreen();
-        if($('#MCDU_SCREEN').data('mcdu-number') == '2')
+        if($('#MCDU_SCREEN').data('mcdu-number') == '2'){
+            // STATUS
+            ff.Get('Aircraft.FMGS.MCDU2.InitFMGC', mcduInitializing);
+            ff.Get('Aircraft.FMGS.MCDU2.Ready', mcduReady);
+            ff.Get('Aircraft.Navigation.Transponder1.Powered', mcduPower);
+            
+            ff.Get('Aircraft.FMGS.MCDU2.Brightness', Brightness);
+            
             ff.Get('Aircraft.FMGS.MCDU2', MCDUData);
+        }
         else
+        {
+            // STATUS
+            ff.Get('Aircraft.FMGS.MCDU1.InitFMGC', mcduInitializing);
+            ff.Get('Aircraft.FMGS.MCDU1.Ready', mcduReady);
+            ff.Get('Aircraft.Navigation.Transponder1.Powered', mcduPower);
+            
+            ff.Get('Aircraft.FMGS.MCDU1.Brightness', Brightness);
+            
             ff.Get('Aircraft.FMGS.MCDU1', MCDUData);
+        }
     }, 300);
 });
+
+function Brightness(data){
+    if(!mcduHasPower) {
+        $('#brightness').css('opacity', 1);
+        return;
+    }
+    
+    mcduBrightness = data;
+    
+    if(mcduBrightness == 0)
+        mcduStopped = true;
+    
+    if(mcduStopped) {
+        $('#brightness').css('opacity', 1);
+        return;
+    }
+    
+    $('#brightness').css('opacity', 1 - (1 / 1.5) * data);
+} 
+
+var mcduBrightness;
+var mcduHasPower;
+var mcduIsInitializing;
+var mcduIsReady;
+var mcduStopped = false;
+
+function mcduPower(data){
+    mcduHasPower = data == 1;
+} 
+
+function mcduReady(data){
+    mcduIsReady = data == 1;
+} 
+
+function mcduInitializing(data){
+    mcduIsInitializing = data == 1;
+} 
 
 //var test = 0;
 function MCDUData(data){
@@ -149,6 +203,29 @@ function ConvertChars(inputstring){
 }
 
 function UpdateScreen() {
+    if(mcduBrightness > 0 && mcduHasPower && mcduIsInitializing && !mcduIsReady)
+    {
+        mcduStopped = false;
+        
+        localMode = "SELFTEST";
+        WriteTextToLine(1, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(2, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(3, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(4, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(5, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(6, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(7, 'GGGGGGGGGGGGGGGGGGGGGGGG', '      PLEASE WAIT       ');
+        WriteTextToLine(8, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(9, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(10, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(11, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(12, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(13, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        WriteTextToLine(14, 'WWWWWWWWWWWWWWWWWWWWWWWW', '                        ');
+        
+        return;
+    }
+    
     if (MCDU_SecondsSelftesting == 6) {
         MCDU_SelfTestCompleted = 1
     }
